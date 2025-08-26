@@ -264,17 +264,17 @@ function Add-Server([string]$name,[string]$hostStr) {
     if ([string]::IsNullOrWhiteSpace($hostStr)) { return }
     if ([string]::IsNullOrWhiteSpace($name)) { $name = $hostStr }
     if (-not (Exists-Server $name $hostStr)) {
-        $Servers += @{ name=$name; host=$hostStr }
+        $script:Servers += @{ name=$name; host=$hostStr }
         $tile = New-Tile @{ name=$name; host=$hostStr }
         $ui[$tile.key] = $tile
         [void]$grid.Children.Add($tile.Border)
         Update-ServerStatus $tile.server
-        Save-Servers $Servers
+        Save-Servers $script:Servers
         Reflow-Grid; Refresh-ListUI
     }
 }
 function Add-ServersBulk([string[]]$hosts) {
-    $i = $Servers.Count + 1
+    $i = $script:Servers.Count + 1
     foreach($h in $hosts){
         $h = $h.Trim()
         if (-not $h) { continue }
